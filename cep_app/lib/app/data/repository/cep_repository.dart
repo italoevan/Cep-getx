@@ -1,6 +1,5 @@
 import 'package:cep_app/app/data/models/cep_model.dart';
 import 'package:cep_app/app/data/provider/cep_provider.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
 
 class CepRepository {
@@ -9,16 +8,35 @@ class CepRepository {
   CepRepository({this.apiClient});
 
   Future<dynamic> getAll(String cep) async {
-    http.Response response = await apiClient.getCep(cep);
-
-    var jsonData = JSON.jsonDecode(response.body);
-
-    if (jsonData['erro'] == null) {
-      return CepModel.fromJson(jsonData);
-    } else if (jsonData['erro'] != null) {
-      return throw ('Insira um Cep válido.');
-    } else if (jsonData == null) {
-      return throw ('Insira um Cep válido.');
+    try {
+      dynamic response = await apiClient.getCep(cep);
+      var jsonData = JSON.jsonDecode(response.body);
+      if (jsonData['erro'] == null) {
+        CepModel cepModel = CepModel.fromJson(jsonData);
+        return cepModel;
+      } else {
+        return throw Exception("Error");
+      }
+    } catch (e) {
+      return throw Exception(e);
     }
+
+    /*
+    dynamic response = await apiClient.getCep(cep);
+    if (response is http.Response) {
+      //Caso retorne json
+      var jsonData = JSON.jsonDecode(response.body);
+      if (jsonData['erro'] != null) {
+        //Retorna json mas com erro (Quando o usuario insere 8 numeros mas não é um cep válido)
+        return throw ('Error');
+      }
+      //Caso seja um cep válido
+      CepModel cepModel = CepModel.fromJson(jsonData);
+      return cepModel;
+    } else {
+      //Usuário errou na quantidade de numeros
+      return throw ('Error');
+    }
+    */
   }
 }

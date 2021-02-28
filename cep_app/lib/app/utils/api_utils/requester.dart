@@ -13,9 +13,6 @@ class Requester {
       var response =
           await http.get(url, headers: header == null ? basicHeaders : header);
       verifyStatusCode(response);
-      if (response.body != "") {
-        JSON.jsonDecode(JSON.utf8.decode(response.bodyBytes));
-      }
       return response;
     } catch (e) {
       return e;
@@ -25,6 +22,6 @@ class Requester {
   verifyStatusCode(http.Response _response) {
     if (_response.body == "") {
       throw new Exception('Empty body');
-    }
+    } 
   }
 }

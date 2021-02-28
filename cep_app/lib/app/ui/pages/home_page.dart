@@ -9,31 +9,40 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Cep App"), centerTitle: true,),
-      body: Stack(children: [
-        Container(
-        padding: EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: controller.cepController.value,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(18))),
-            ),
-            SizedBox(
-              height: Get.height / 40,
-            ),
-            CustomButtonHome(
-                height: Get.height, function: () => controller.getCep())
-          ],
-        ),
+      appBar: AppBar(
+        title: Text("Cep App"),
+        centerTitle: true,
       ),
-      Obx(()=>
-         controller.showLoading()
-      )
-      ],),
+      body: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Obx(() => TextFormField(
+                      onChanged: (value) {
+                        controller.onChange(value: value);
+                      },
+                      controller: controller.cepController.value,
+                      decoration: InputDecoration(
+                          errorText: controller.error.value,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(18))),
+                    )),
+                SizedBox(
+                  height: Get.height / 40,
+                ),
+                CustomButtonHome(
+                    controller: controller,
+                    height: Get.height,
+                    function: () => controller.getCep())
+              ],
+            ),
+          ),
+          Obx(() => controller.showLoading())
+        ],
+      ),
     );
   }
 }
