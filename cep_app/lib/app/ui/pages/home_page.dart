@@ -9,8 +9,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("HomePAGE")),
-      body: Container(
+      appBar: AppBar(title: Text("Cep App"), centerTitle: true,),
+      body: Stack(children: [
+        Container(
         padding: EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -29,6 +30,10 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
+      Obx(()=>
+         controller.showLoading()
+      )
+      ],),
     );
   }
 }

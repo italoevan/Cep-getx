@@ -1,4 +1,4 @@
-import 'package:cep_app/app/bindings/cep_binding.dart';
+import 'package:cep_app/app/binding/cep_binding.dart';
 import 'package:cep_app/app/routes/app_routes.dart';
 import 'package:cep_app/app/ui/cep_dados.dart';
 import 'package:cep_app/app/ui/pages/home_page.dart';

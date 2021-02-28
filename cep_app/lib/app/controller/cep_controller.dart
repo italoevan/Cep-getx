@@ -3,7 +3,6 @@ import 'package:cep_app/app/data/repository/cep_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 class CepController extends GetxController {
   final CepRepository repository;
@@ -13,19 +12,35 @@ class CepController extends GetxController {
   var isLoading = false.obs;
 
   getCep() async {
-    isLoading.value = true;
-    var cepModel =
-        await repository.getAll(cepController.value.text).then((model) {
-      print(model.cep);
-      isLoading.value = false;
+    changeLoading();
+    await repository.getAll(cepController.value.text).then((model) {
+      changeLoading();
       Get.toNamed('/dados', arguments: model);
-    }).catchError((e) {
-      isLoading.value = false;
-      Get.dialog(AlertDialog(
-        content: Container(
-          child: Text("Error"),
-        ),
-      ));
+    }).catchError((error) {
+      changeLoading();
+      showErrorDialog(error.toString());
     });
   }
+
+  showErrorDialog(String error) {
+    return Get.dialog(AlertDialog(
+      content: Container(
+        child: Text(error),
+      ),
+    ));
+  }
+
+  Widget showLoading() {
+    if (isLoading.value) {
+      return Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(Colors.green),
+        ),
+      );
+    } else {
+      return SizedBox();
+    }
+  }
+
+  changeLoading() => isLoading.value = !isLoading.value;
 }
